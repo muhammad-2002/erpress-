@@ -5,6 +5,44 @@ const todoSchema = require('../schema/todoSchema')
 const router = express.Router()
 const Todo = new mongoose.model('Todo',todoSchema)
 
+router.get('/activeInstance',async(req,res)=>{
+    const newTodo = new Todo()
+    const resp = await newTodo.findActive()
+    res.status(200).json({
+        resp,
+    })
+    
+});
+
+
+//statics method  
+router.get('/js',async(req,res)=>{
+    
+    const resp = await Todo.findJs()
+    res.status(200).json({
+        resp,
+    })
+    
+});
+router.get('/language',async(req,res)=>{
+    
+    const resp = await Todo.find().findByQuery("react")
+    res.status(200).json({
+        resp,
+    })
+    
+});
+
+// router.get('/active-callback',(req,res)=>{
+//     const newTodo = new Todo()
+//      newTodo.findActiveCallback((err,data)=>{
+//             res.status(500).json({
+//                 data
+//             })
+//     })
+   
+    
+// });
 router.get('/',async(req,res)=>{
     try{
         const todo = await Todo.find({status:'active'}).select({
