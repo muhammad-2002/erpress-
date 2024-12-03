@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const todoSchema = require('../schema/todoSchema')
 const router = express.Router()
 const Todo = new mongoose.model('Todo',todoSchema)
+const verifyToken = require('../middleware/authentication')
 
 router.get('/activeInstance',async(req,res)=>{
     const newTodo = new Todo()
@@ -43,8 +44,9 @@ router.get('/language',async(req,res)=>{
    
     
 // });
-router.get('/',async(req,res)=>{
+router.get('/',verifyToken,async(req,res)=>{
     try{
+        console.log(req.username)
         const todo = await Todo.find({status:'active'}).select({
             _id:0,
             date:0
